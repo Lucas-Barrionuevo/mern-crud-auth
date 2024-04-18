@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import TaskCard  from "../components/TaskCard";
+import TaskCard from "../components/TaskCard";
 import { useTasks } from "../context/TasksContext";
 
 function TaskPage() {

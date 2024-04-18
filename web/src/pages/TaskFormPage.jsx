@@ -22,7 +22,7 @@ function TaskFormPage() {
         setValue("description", task.description);
         setValue("date", dayjs(task.date).utc().format("YYYY-MM-DD"));
       }
-    }
+    };
     loadTask();
   }, []);
 
@@ -40,31 +40,37 @@ function TaskFormPage() {
   });
 
   return (
-    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
-      <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+    <div className="flex h-screen items-center justify-center">
+      <div className="bg-gray-800 max-w-md w-full p-10 rounded-md">
         <form onSubmit={onSubmit}>
-          <label htmlFor="title">title</label>
+          <label htmlFor="title" className="text-white">
+            title
+          </label>
           <input
             type="text"
             placeholder="Title"
             {...register("title")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-gray-700 text-white px-4 py-2 rounded-md my-2"
             autoFocus
           />
-          <label htmlFor="description">description</label>
+          <label htmlFor="description" className="text-white">
+            description
+          </label>
           <textarea
             rows="3"
             placeholder="Description"
             {...register("description")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-gray-700 text-white px-4 py-2 rounded-md my-2"
           ></textarea>
           <input
             type="date"
             {...register("date")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-gray-700 text-white px-4 py-2 rounded-md my-2"
           />
 
-          <button className="bg-indigo-500 px-3 py-2 rounded-md">Save</button>
+          <button className="bg-blue-500 px-3 py-2 rounded-md text-white">
+            Save
+          </button>
         </form>
       </div>
     </div>

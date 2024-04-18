@@ -1,3 +1,4 @@
+// TaskCard.jsx
 import { useTasks } from "../context/TasksContext";
 import { Link } from "react-router-dom";
 
@@ -9,9 +10,9 @@ function TaskCard({ task }) {
   const { deleteTask } = useTasks();
 
   return (
-    <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+    <div className="bg-gray-800 max-w-md w-full p-10 rounded-md">
       <header className="flex justify-between">
-        <h1 className="text-2xl font-bold">{task.title}</h1>
+        <h1 className="text-2xl font-bold text-white">{task.title}</h1>
         <div className="flex gap-x-2 items-center">
           <button
             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
@@ -29,8 +30,8 @@ function TaskCard({ task }) {
           </Link>
         </div>
       </header>
-      <p className="text-slate-300">{task.description}</p>
-      <p>{days(task.date).utc().format("DD/MM/YYYY")}</p>
+      <p className="text-gray-300">{task.description}</p>
+      <p className="text-white">{days(task.date).utc().format("DD/MM/YYYY")}</p>
     </div>
   );
 }
