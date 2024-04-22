@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
+import { LoginPage } from "./pages/LoginPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import RegisterPage from "./pages/RegisterPage";
 import { AuthProvider } from "./context/AuthContext";
 import TaskPage from "./pages/TaskPage";
@@ -31,6 +32,7 @@ function App() {
                   <Route path="/tasks/:id" element={<TaskFormPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                 </Route>
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>
           </BrowserRouter>

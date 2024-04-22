@@ -14,45 +14,45 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function checkLogin() {
-      const cookies = Cookies.get();
-
-      if (!cookies.token) {
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-
+    const checkLogin = async () => {
       try {
+        const cookies = Cookies.get();
+        if (!cookies.token) {
+          throw new Error("No token found");
+        }
+
         const res = await verifyTokenRequest(cookies.token);
         if (!res.data) {
-          setUser(null);
-          setLoading(false);
-          return;
+          throw new Error("Invalid token");
         }
+
         setUser(res.data);
-        setLoading(false);
       } catch (error) {
         console.log(error);
         setUser(null);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
+
     checkLogin();
   }, []);
 
   useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([]);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
+    const clearErrorsTimer = setTimeout(() => {
+      setErrors([]);
+    }, 5000);
+
+    return () => {
+      clearTimeout(clearErrorsTimer);
+    };
   }, [errors]);
 
   const login = async (user) => {
     try {
       const res = await loginRequest(user);
       setUser(res.data);
+      setErrors([]); // Limpiar errores al iniciar sesión con éxito
     } catch (error) {
       console.log(error);
       setErrors([error.response.data.message]);
@@ -63,8 +63,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await registerRequest(user);
       setUser(res.data);
+      setErrors([]); // Limpiar errores al registrarse con éxito
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
       setErrors([error.response.data.message]);
     }
   };

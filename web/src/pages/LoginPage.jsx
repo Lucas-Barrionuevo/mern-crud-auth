@@ -1,30 +1,41 @@
-import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 
-function LoginPage() {
+export function LoginPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const { login, errors: loginErrors, isAuthenticated } = useAuth(); // Cambiado de 'signin' a 'login'
+  
+  const { login, errors: loginErrors, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [loginErrorMessages, setLoginErrorMessages] = useState([]);
 
   const onSubmit = handleSubmit((data) => {
-    login(data); // Cambiado de 'signin' a 'login'
+    login(data);
   });
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/tasks");
+    if (isAuthenticated) {
+      navigate("/tasks");
+    }
   }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    if (loginErrors && loginErrors.length > 0) {
+      setLoginErrorMessages(loginErrors);
+    } else {
+      setLoginErrorMessages([]);
+    }
+  }, [loginErrors]);
+
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="h-screen flex items-center justify-center">
       <div className="bg-gray-800 max-w-md w-full p-10 rounded-md">
-        {loginErrors && loginErrors.map((error, i) => (
+        {loginErrorMessages.map((error, i) => (
           <div className="bg-red-500 p-2 text-white my-2" key={i}>
             {error}
           </div>
@@ -62,5 +73,3 @@ function LoginPage() {
     </div>
   );
 }
-
-export default LoginPage;
