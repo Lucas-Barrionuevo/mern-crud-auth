@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function RegisterPage() {
-  const { register: formRegister, handleSubmit } = useForm();
-  const { register: signup, isAuthenticated, errors: registerErrors } = useAuth();
+  const { register: formRegister, handleSubmit } = useForm(); // Obtener handleSubmit del hook useForm
+  const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [errorMessages, setErrorMessages] = useState([]);
 
   const onSubmit = async (data) => {
     try {
-      await signup(data);
+      await register(data);
     } catch (error) {
       if (error.response && error.response.data) {
         setErrorMessages([error.response.data.message]);
@@ -21,6 +21,12 @@ function RegisterPage() {
       }
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/tasks");
+    }
+  }, [isAuthenticated, navigate]);
 
   const clearErrorMessages = () => {
     setErrorMessages([]);
@@ -35,7 +41,7 @@ function RegisterPage() {
           </div>
         ))}
         <h1 className="text-3xl font-bold my-2 text-white">Register</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}> {/* Usar handleSubmit aquí */}
           <input
             type="text"
             {...formRegister("username", { required: true })}
