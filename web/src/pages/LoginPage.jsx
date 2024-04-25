@@ -1,10 +1,11 @@
 import AuthForm from "../components/AuthForm";
+import AuthFormSkeleton from "../components/AuthFormSkeleton";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +16,7 @@ const LoginPage = () => {
 
   return (
     <div className="h-screen flex items-center justify-center">
-      <AuthForm type="login" />
+      {isLoading ? <AuthFormSkeleton /> : <AuthForm type="login" />}
     </div>
   );
 };

@@ -1,10 +1,11 @@
 import AuthForm from "../components/AuthForm";
+import AuthFormSkeleton from "../components/AuthFormSkeleton";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const RegisterPage = () => {
-  const { isAuthenticated, register } = useAuth();
+  const { isAuthenticated, isLoading, register } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +25,11 @@ const RegisterPage = () => {
 
   return (
     <div className="h-screen flex items-center justify-center">
-      <AuthForm type="register" onSubmit={handleRegister} />
+      {isLoading ? (
+        <AuthFormSkeleton />
+      ) : (
+        <AuthForm type="register" onSubmit={handleRegister} />
+      )}
     </div>
   );
 };

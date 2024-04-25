@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import TaskCard from "../components/TaskCard";
 import { useTasks } from "../context/TasksContext";
+import TaskCardSkeleton from "../components/TaskCardSkeleton";
 
 function TaskPage() {
-  const { getTasks, tasks } = useTasks();
+  const { getTasks, tasks, loading } = useTasks();
 
   useEffect(() => {
     getTasks();
   }, []);
+
+  if (loading) return <TaskCardSkeleton />;
 
   if (tasks.length === 0) return <h1>No tasks</h1>;
 

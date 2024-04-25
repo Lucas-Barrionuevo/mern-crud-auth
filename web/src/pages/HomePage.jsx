@@ -1,5 +1,7 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import {useAuth}  from "../context/AuthContext";  // Asegúrate de tener esta ruta correcta.
+import { useAuth } from "../context/AuthContext";
+import AuthFormSkeleton from "../components/AuthFormSkeleton";
 
 function HomePage() {
     const { isAuthenticated } = useAuth();
