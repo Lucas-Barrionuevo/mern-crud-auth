@@ -1,25 +1,30 @@
-import AuthForm from "../components/AuthForm";
-import AuthFormSkeleton from "../components/AuthFormSkeleton";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import AuthForm from "../components/AuthForm";
+import AuthFormSkeleton from "../components/AuthFormSkeleton";
 
 const RegisterPage = () => {
-  const { isAuthenticated, isLoading, register } = useAuth();
+  const { isAuthenticated, isLoading, register, errors } = useAuth();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/tasks');
+      navigate("/tasks");
     }
   }, [isAuthenticated, navigate]);
 
   const handleRegister = async (formData) => {
     try {
       await register(formData);
-      navigate('/tasks');
+      navigate("/tasks");
     } catch (error) {
-      console.error("An error occurred while registering:", error);
+      let errorMessageToShow = "An unexpected error occurred. Please try again later.";
+      if (error.response && error.response.data && error.response.data.message) {
+        errorMessageToShow = error.response.data.message;
+      }
+      setErrorMessage(errorMessageToShow);
     }
   };
 
@@ -28,7 +33,12 @@ const RegisterPage = () => {
       {isLoading ? (
         <AuthFormSkeleton />
       ) : (
-        <AuthForm type="register" onSubmit={handleRegister} />
+        <div>
+          {errorMessage && (
+            <div className="bg-red-500 p-2 text-white my-2">{errorMessage}</div>
+          )}
+          <AuthForm type="register" errors={errors} onSubmit={handleRegister} />
+        </div>
       )}
     </div>
   );

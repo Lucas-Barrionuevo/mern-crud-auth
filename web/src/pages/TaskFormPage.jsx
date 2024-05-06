@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useTasks } from "../context/TasksContext";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonSkeleton from "../components/ButtonSkeleton";
-import { formatDateForBackend, formatDateForUI } from "../hooks/dateUtils"; // Importa las nuevas funciones
+import { formatDateForBackend, formatDateForUI } from "../hooks/dateUtils"; 
 
 function TaskFormPage() {
   const { register, handleSubmit, setValue } = useForm();
@@ -18,7 +18,7 @@ function TaskFormPage() {
         const task = await getTask(params.id);
         setValue("title", task.title);
         setValue("description", task.description);
-        setValue("date", formatDateForUI(task.date)); // Utiliza la función para formatear la fecha para la interfaz de usuario
+        setValue("date", formatDateForUI(task.date)); 
       }
     };
     loadTask();
@@ -28,7 +28,7 @@ function TaskFormPage() {
     setLoading(true);
     const dataValid = {
       ...data,
-      date: formatDateForBackend(data.date), // Utiliza la función para formatear la fecha para el backend
+      date: formatDateForBackend(data.date), 
     };
     try {
       if (params.id) {

@@ -16,8 +16,7 @@ const InputField = ({ type, name, value, onChange, placeholder }) => {
 };
 
 const AuthForm = ({ type }) => {
-  const { login, register } = useAuth();
-  const [error, setError] = useState("");
+  const { login, register, errors } = useAuth(); // Acceso a la variable errors desde el contexto
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,13 +36,19 @@ const AuthForm = ({ type }) => {
         await register(formData);
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      console.log(error);
     }
   };
 
   return (
     <div className="max-w-md w-full p-10 rounded-md bg-gray-800">
-      {error && <div className="bg-red-500 p-2 text-white my-2">{error}</div>}
+      {errors && errors.length > 0 && ( // Verificar si errors está definido y tiene longitud mayor que cero
+        <div className="bg-red-500 p-2 text-white my-2">
+          {errors.map((error, index) => (
+            <div key={index}>{error}</div>
+          ))}
+        </div>
+      )}
       <h1 className="text-3xl font-bold my-2 text-white">
         {type === "login" ? "Login" : "Register"}
       </h1>
@@ -78,26 +83,26 @@ const AuthForm = ({ type }) => {
           {type === "login" ? "Login" : "Register"}
         </button>
       </form>
-      <div className="flex justify-between text-white"> 
-        <div> 
+      <div className="flex justify-between text-white">
+        <div>
           {type === "login" ? (
-            <span>
-              Don't have an account?{" "}
-            </span>
+            <span>Don't have an account? </span>
           ) : (
-            <span>
-              Already have an account?{" "}
-            </span>
+            <span>Already have an account? </span>
           )}
         </div>
-        <div> 
+        <div>
           {type === "login" ? (
             <span>
-              <Link to="/register" className="text-blue-500 underline">Register</Link>
+              <Link to="/register" className="text-blue-500 underline">
+                Register
+              </Link>
             </span>
           ) : (
             <span>
-              <Link to="/login" className="text-blue-500 underline">Login</Link>
+              <Link to="/login" className="text-blue-500 underline">
+                Login
+              </Link>
             </span>
           )}
         </div>

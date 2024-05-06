@@ -10,7 +10,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState([]); // Cambiado a array vacío inicialmente
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,13 +40,13 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const clearErrorsTimer = setTimeout(() => {
-      setErrors([]);
+      setErrors([]); // Limpiar errores después de cierto tiempo
     }, 5000);
 
     return () => {
       clearTimeout(clearErrorsTimer);
     };
-  }, [errors]);
+  }, []);
 
   const login = async (user) => {
     try {
@@ -54,8 +54,14 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       setErrors([]); // Limpiar errores al iniciar sesión con éxito
     } catch (error) {
-      console.log(error);
-      setErrors([error.response.data.message]);
+      if (error.response && error.response.data && error.response.data.message) {
+        console.log(error.response.data.message); // Mostrar solo el mensaje de error en la consola
+        setErrors([error.response.data.message]);
+      } else {
+        console.log("An unexpected error occurred. Please try again later.");
+        setErrors(["An unexpected error occurred. Please try again later."]);
+      }
+      throw error; // Propagate error to caller
     }
   };
 
@@ -65,10 +71,20 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       setErrors([]); // Limpiar errores al registrarse con éxito
     } catch (error) {
-      console.log(error);
-      setErrors([error.response.data.message]);
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data;
+        console.log(errorMessage); // Mostrar el mensaje de error en la consola
+        setErrors(errorMessage); // Establecer el mensaje de error en la variable errors
+      } else {
+        console.log("An unexpected error occurred. Please try again later.");
+        setErrors(["An unexpected error occurred. Please try again later."]);
+      }
+      throw error; // Propagar error al llamante
     }
   };
+  
+  
+  
 
   const logout = () => {
     Cookies.remove("token");
